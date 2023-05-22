@@ -1,0 +1,51 @@
+server.port: 8082
+
+spring:
+  cloud.gateway.routes:
+    - id: pickem
+      uri: http://localhost:8080
+      predicates:
+        - Host=pickem.jay.com:8082
+    - id: wahoo frontend
+      uri: http://localhost:3000
+      predicates:
+        - Host=wahoo.jay.com:8082
+        - Path=/, /static/**, /favicon.ico
+    - id: wahoo backend
+      uri: http://localhost:8081
+      predicates:
+        - Host=wahoo.jay.com:8082
+        - Path=/api/**, /ws/info/**
+    - id: wahoo backend websocket
+      uri: ws://localhost:8081
+      predicates:
+        - Host=wahoo.jay.com:8082
+        - Path=/ws/**
+
+---
+spring:
+  cloud.gateway.routes:
+    - id: pickem
+      uri: http://localhost:8080
+      predicates:
+        - Host=the-boys-pickem.com,www.the-boys-pickem.com
+    - id: wahoo frontend
+      uri: http://localhost:3000
+      predicates:
+        - Host=wahoo.the-boys-pickem.com
+        - Path=/, /static/**, /favicon.ico
+    - id: wahoo backend
+      uri: http://localhost:8081
+      predicates:
+        - Host=wahoo.the-boys-pickem.com
+        - Path=/api/**, /ws/info/**
+    - id: wahoo backend websocket
+      uri: ws://localhost:8081
+      predicates:
+        - Host=wahoo.the-boys-pickem.com
+        - Path=/ws/**
+  config:
+    activate:
+      on-profile: production
+
+server.port: 80
